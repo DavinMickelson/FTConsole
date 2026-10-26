@@ -19,3 +19,6 @@ x86/
 
 # Logs
 *.log
+
+# Temporary files
+RandomNumber.txt
