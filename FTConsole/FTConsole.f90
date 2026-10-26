@@ -1,3 +1,4 @@
+
 	!****************************************************************************
 	! FTConsole.f90
 	!
@@ -40,6 +41,8 @@
 	print *, "========================================="
 	print *
 
+! ===========================================================
+! Ask user's name
 	print *, "What is your name?"
 	read(*,'(A)') playerName
 
@@ -48,14 +51,17 @@
 	print *
 
 	! integer :: i
+  print *, "The largest integer is: "
 	print *, huge(i)
 
+! ===========================
+! Generate random numbers based on user input
 	print *, "How many random numbers should I generate?"
 	read(*,*) valueCount
 
 	allocate(values(valueCount))
 
-	! Generate random numbers
+! Call GenerateRandomArray()
 	call GenerateRandomArray(values)
 
 	print *, valueCount, " random numbers were generated:"
@@ -73,6 +79,8 @@
 
 	close(10)
 
+! ===========================
+! Calculate and display statistics
 	print *
 	print *, "Statistics"
 	print *, "----------"
@@ -81,12 +89,14 @@
 	write(*,'(A,F8.4)') "Maximum = ", maxval(values)
 	write(*,'(A,F8.4)') "Minimum = ", minval(values)
 
-	!print *
-	!print *, "Let's play a guessing game!"
-	!call GuessingGame(score)
- !
-	!print *
-	!print *, "Final Score = ", score
+! ===========================
+! Guessing game
+	print *
+	print *, "Let's play a guessing game!"
+	call GuessingGame(score)
+ 
+	print *
+	print *, "Final Score = ", score
 
 	if (score > 75) then
 		print *, "Excellent!"
