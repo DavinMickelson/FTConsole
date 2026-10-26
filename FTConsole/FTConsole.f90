@@ -23,6 +23,7 @@
 	integer :: i = 0
 	integer :: score = 0
 	integer :: valueCount = 0
+	character(len=1) :: pause
 
 	! Banking
 	type(BankAccount) :: BankAcct
@@ -46,27 +47,28 @@
 	write(*,'(A)', advance='no') "What is your name? :"
 	read(*,'(A)') playerName
 
-	print *, ""
-	print *, "Welcome ", trim(playerName), "!"
-	print *, ""
+	write(*,'(A)') ""
+	write(*,'(3A)') "Welcome, ", trim(playerName), "!"
+	write(*,'(A)') "Welcome, " // trim(playerName)  // "!"
+	write(*,'(A)') ""
 
 	! ===============================================
 	! Display the largest numbers for integer, real, and double precision
 
-	print *, "The largest integer is: "
-	print *, huge(1)
-	print *, ""
-	print *, "The largest real is: "
-	print *, huge(1.0)
-	print *, ""
-	print *, "The largest double precision real is: "
-	print *, huge(1.0d0)
-	print *
+	write(*,'(A)') "The largest integer is: "
+	write(*,*) huge(1)
+	write(*,'(A)') ""
+	write(*,'(A)') "The largest real is: "
+	write(*,*) huge(1.0)
+	write(*,'(A)') ""
+	write(*,'(A)') "The largest double precision real is: "
+	write(*,*) huge(1.0d0)
+	write(*,'(A)') ""
 
 	! ===============================================
 	! Generate random numbers based on user input
 
-	print *, "How many random numbers should I generate?"
+	write(*,'(A)') "How many random numbers should I generate?"
 	read(*,*) valueCount
 
 	allocate(values(valueCount))
@@ -74,7 +76,7 @@
 	! Call GenerateRandomArray()
 	call GenerateRandomArray(values)
 
-	print *, valueCount, " random numbers were generated:"
+	write(*,'(A,I0,A)') "Generated ", valueCount, " random numbers:"
 
 	do i = 1, size(values)
 		write(*,'(I7,A,F8.4)') i, ": ", values(i)
@@ -90,39 +92,44 @@
 	close(10)
 
 	! Calculate and display statistics
-	print *, ""
-	print *, "Statistics"
-	print *, "----------"
+	write(*,'(A)') ""
+	write(*,'(A)') "Statistics"
+	write(*,'(A)') "----------"
 
 	write(*,'(A,F8.4)') "Minimum = ", minval(values)
 	write(*,'(A,F8.4)') "Maximum = ", maxval(values)
 	write(*,'(A,F8.4)') "Average = ", Average(values)
-	
+
 	! ===============================================
 	! Guessing game
 
-	print *, ""
-	print *, "Guessing game"
-	print *, "-------------"
+	write(*,'(A)') ""
+	write(*,'(A)') "Guessing game"
+	write(*,'(A)') "-------------"
 	call GuessingGame(score)
 
-	print *, ""
-	print *, "Final Score = ", score
+	write(*,'(A)') ""
+	write(*,'(A,I0)') "Final Score = ", score
 
-	if (score > 75) then
-		print *, "Excellent!"
-	else if (score > 50) then
-		print *, "Pretty good!"
+	if (score >= 70) then
+		write(*,'(A)') "Excellent!"
+	else if (score >= 50) then
+		write(*,'(A)') "Pretty good!"
 	else
-		print *, "You can do better!"
+		write(*,'(A)') "You can do better!"
 	end if
+
+	write(*,'(A)') ""
+	write(*,'(A)',advance='no') &
+		"Press <Enter> to continue..."
+	read(*,'(A)') pause
 
 	! ===============================================
 	! Banking fun
 
-	print *, ""
-	print *, "Banking"
-	print *, "-------"
+	write(*,'(A)') ""
+	write(*,'(A)') "Banking"
+	write(*,'(A)') "-------"
 
 	! Create three types of accounts
 	BankAcct%Owner = "Bob"
@@ -136,13 +143,15 @@
 	Checking%Owner = "Ellen"
 	Checking%Balance = 5000.0
 	Checking%MonthlyFee = 10
-	
+
 	! Demonstrate account functionality
 
 	call BankAcct%Display()
 	write(*,'(A)') "Depositing $500 into Bob's Bank account..."
 	call BankAcct%Deposit(500.0)
 	call BankAcct%Display()
+
+	write(*,'(A)') "==============================="
 
 	call Savings%Display()
 	write(*,'(A)') "Depositing $200 into Bryan's Savings account..."
@@ -158,6 +167,8 @@
 	write(*,'(A)') "After withdrawal:"
 	call Savings%Display()
 
+	write(*,'(A)') "==============================="
+
 	call Checking%Display()
 	write(*,'(A)') "Applying monthly fee..."
 	call Checking%ApplyMonthlyFee()
@@ -167,8 +178,8 @@
 	! ===============================================
 	! Program completion message
 
-	print *, ""
-	print *, "Program complete."
+	write(*,'(A)') ""
+	write(*,'(A)') "Program complete."
 
 	contains
 
@@ -177,7 +188,7 @@
 	subroutine GuessingGame(score)
 
 	integer, intent(out) :: score
-	
+
 	integer :: guessCount = 0
 	integer :: answer
 	integer :: guess
@@ -187,9 +198,9 @@
 
 	answer = int(r * 100.0) + 1
 
-	print *, "I am thinking of a number between 1 and 100."
-	print *, "Can you guess it?"
-	print *, "Use -1 to skip."
+	write(*,'(A)') "I am thinking of a number between 1 and 100."
+	write(*,'(A)') "Can you guess it?"
+	write(*,'(A)') "Use -1 to skip."
 
 	do
 		guessCount = guessCount + 1
@@ -198,22 +209,22 @@
 		read(*,*) guess
 
 		if (guess == -1) then
-			print *, "Skipping..."
+			write(*,'(A)') "Skipping..."
 			exit
 		end if
 
 		if (guess < 1 .or. guess > 100) then
-			print *, "Please enter a number between 1 and 100."
+			write(*,'(A)') "Please enter a number between 1 and 100."
 			cycle
 		end if
 
 		if (guess == answer) then
-			print *, "Correct!"
+			write(*,'(A)') "Correct!"
 			exit
 		else if (guess < answer) then
-			print *, "Too low."
+			write(*,'(A)') "Too low."
 		else
-			print *, "Too high."
+			write(*,'(A)') "Too high."
 		end if
 
 	end do
